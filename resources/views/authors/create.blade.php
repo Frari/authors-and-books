@@ -4,6 +4,16 @@
   {{-- form create new author with his book --}}
     <div class='container mt-5'>
         <h1 class='text-center'>Add a new author and his book</h1>
+        {{-- message validation --}}
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <form action="{{route('authors.store')}}" method="post">
             @csrf
             <div class="form-group">
