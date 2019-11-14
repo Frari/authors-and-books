@@ -9,5 +9,5 @@ class Author extends Model
     public function books(){
         return $this->hasMany('App\Book');
     }
-    protected $fillable = ['name', 'age', 'address'];
+    protected $fillable = ['id','name', 'age', 'address'];
 }
