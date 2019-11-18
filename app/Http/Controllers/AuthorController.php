@@ -13,7 +13,7 @@ class AuthorController extends Controller
     public function index()
     {
         // send data author cards to index view
-        $authors = Author::with('books')->get();
+        $authors = Author::with('books')->paginate(5);
         $data = [
             'authors' => $authors
         ];
@@ -44,7 +44,7 @@ class AuthorController extends Controller
 
         $new_author->save();
 
-        // cretae new book
+        // create new book
         $new_book = new Book();
         $new_book->name = $data['title'];
         $new_book->release_date = $data['release'];
@@ -61,7 +61,14 @@ class AuthorController extends Controller
     public function show($id)
 
     {
-       //
+        // select author with unique id to show his books
+       $author_book = Author::with('books')->get()->find($id);
+    
+       $data = [
+           'author_book' => $author_book
+       ];
+
+       return view ('authors.show', $data);
     }
 
 
@@ -77,8 +84,13 @@ class AuthorController extends Controller
     }
 
 
-    public function destroy(Author $author)
+    public function destroy($id)
     {
-        //
+        // delete books with foreign key
+        $delete_book = Book::with('authors')->where('author_id','=',$id)->delete();
+        // delete author selected
+        $delete_autor = Author::find($id)->delete();
+        
+        return redirect()->route('authors.index');
     }
 }
